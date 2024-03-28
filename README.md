@@ -1,5 +1,7 @@
 # csce3110_group_project
 
+⚠️ **This project is currently written in TypeScript and requires the TypeScript compiler to properly build.**
+
 Authors:
 
 - Dawson Finklea
