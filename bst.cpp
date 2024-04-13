@@ -20,6 +20,8 @@ The run time of each operation is found in the comment above that respective ope
 */
 
 #include <iostream>
+#include <chrono>
+#include <time.h>
 using namespace std;
 
 //#include "bst.hpp"
@@ -93,7 +95,7 @@ class BinarySearchTree{
         /*
         * insert
         *
-        * runtime:
+        * Runtime:
         */
 
         void insertStudent(Node* &node, Student s){
@@ -113,7 +115,7 @@ class BinarySearchTree{
         *
         * @todo Add code so it's fine to delete root - right now it's not
         * 
-        * runtime:
+        * Runtime:
         */
        Node* deleteStudent(Node* &node, int sID){
             //base case
@@ -169,7 +171,7 @@ class BinarySearchTree{
         /*
         * search via id
         *
-        * runtime:
+        * Runtime:
         */
 
 
@@ -177,7 +179,7 @@ class BinarySearchTree{
         /*
         * search via name
         *
-        * runtime:
+        * Runtime:
         */
 
 
@@ -185,14 +187,13 @@ class BinarySearchTree{
         /*
         * update
         *
-        * runtime:
+        * Runtime:
         */
 };
 
 Student student = Student();
 BinarySearchTree bst = BinarySearchTree();
 Node *root;
-int menuChoice = -1;
 
 //function to get student data from user and create Student object
 void getStudent(){
@@ -218,6 +219,12 @@ void getStudent(){
 
 //user menu
 void menu(){
+    int menuChoice = -1;
+    double runTime;
+    srand(time(0));
+    auto start = chrono::high_resolution_clock::now();
+    auto end = chrono::high_resolution_clock::now();;
+
     cout << "Welcome to the student database." << endl;
     do{
         cout << "Please enter the number of your menu choice: " << endl;
@@ -233,9 +240,20 @@ void menu(){
         switch (menuChoice)
         {
         case 1:
-            //insert function
+            /*insert function*/
             getStudent();
+
+            //get runtime while performing insert
+            start = chrono::high_resolution_clock::now();
             bst.insertStudent(root, student);
+            end = chrono::high_resolution_clock::now();
+
+            runTime = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            runTime *= 1e-9;
+
+            //print runtime
+            cout << "The student has been added to the database." << endl;
+            cout << "The runtime for this function was: " << runTime << endl;
             break;
         case 2:
             //search function - overloaded
@@ -249,7 +267,18 @@ void menu(){
             int studentID;
             cin >> studentID;
             cin.ignore();
+
+            //get runtime while performing delete
+            start = chrono::high_resolution_clock::now();
             bst.deleteStudent(root, studentID);
+            end = chrono::high_resolution_clock::now();
+
+            runTime = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            runTime *= 1e-9;
+
+            //print runtime
+            cout << "The student has been deleted from the database." << endl;
+            cout << "The runtime for this function was: " << runTime << endl;
             break;
         case 5:
             cout << "Program terminating." << endl;
