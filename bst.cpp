@@ -13,18 +13,19 @@ The run time of each operation is found in the comment above that respective ope
 
 @todo
     fix delete function
-    add overloaded search functions
+    add search by name function
     add update function
     incorporate faker
-    add runtimes
+    input validation
 */
 
 #include <iostream>
 #include <chrono>
 #include <time.h>
+
 using namespace std;
 
-//#include "bst.hpp"
+
 
 class Student{
     public:
@@ -82,7 +83,7 @@ class BinarySearchTree{
     public:
         //constructor
         BinarySearchTree(){
-            Node* root = nullptr;
+            root = nullptr;
         }
 
         //destructor ---- don't know if this should be included
@@ -173,7 +174,17 @@ class BinarySearchTree{
         *
         * Runtime:
         */
-
+       Node* search(Node* &node, int sID){
+            if(node == NULL || node->student.id == sID){
+                return node;
+            }
+            else if(node->student.id < sID){
+                return search(node->right, sID);
+            }
+            else{
+                return search(node->left, sID);
+            }
+       }
 
 
         /*
@@ -181,7 +192,9 @@ class BinarySearchTree{
         *
         * Runtime:
         */
+       Node* search(Node* &node, string sName){
 
+       }
 
 
         /*
@@ -217,9 +230,21 @@ void getStudent(){
     cin.ignore();    
 }
 
+void printStudent(Node *s){
+    if(s != NULL){
+        cout << "ID: " << s->student.id << endl;
+        cout << "Name: " << s->student.name << endl;
+        cout << "Date of birth: " << s->student.dob << endl;
+        cout << "Address: " << s->student.street << ", " << s->student.city << ", " << s->student.state << ", " << s->student.zip << endl;
+    }
+}
+
 //user menu
 void menu(){
     int menuChoice = -1;
+    Node *foundStudent; //used in search functions
+    string studentName; //used in search by name function
+    int studentID; //used in search by id and delete functions
     double runTime;
     srand(time(0));
     auto start = chrono::high_resolution_clock::now();
@@ -229,10 +254,11 @@ void menu(){
     do{
         cout << "Please enter the number of your menu choice: " << endl;
         cout << "(1) Insert student into database" << endl;
-        cout << "(2) Search for existing student" << endl;
-        cout << "(3) Update existing student" << endl;
-        cout << "(4) Delete student from database" << endl;
-        cout << "(5) Exit program" << endl;
+        cout << "(2) Search for existing student by ID" << endl;
+        cout << "(3) Search for existing student by name" << endl;
+        cout << "(4) Update existing student" << endl;
+        cout << "(5) Delete student from database" << endl;
+        cout << "(6) Exit program" << endl;
 
         cin >> menuChoice;
         cin.ignore();
@@ -256,15 +282,40 @@ void menu(){
             cout << "The runtime for this function was: " << runTime << endl;
             break;
         case 2:
-            //search function - overloaded
+            //search via id
+            cout << "Please enter the ID of the student: " << endl;
+            cin >> studentID;
+            cin.ignore();
+
+            //get runtime while performing search
+            start = chrono::high_resolution_clock::now();
+            foundStudent = bst.search(root, studentID);
+            end = chrono::high_resolution_clock::now();
+
+            runTime = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            runTime *= 1e-9;
+
+            cout << "Here are the details for the student: " << endl;
+            printStudent(foundStudent);
+
+            cout << "The runtime for this function was: " << runTime << endl;
             break;
         case 3:
-            //update function
+            //search via name
+            cout << "Please enter the name of the student: " << endl;
+            getline(cin, studentName);
+
+            foundStudent = bst.search(root, studentName);
+
+            cout << "Here are the details for the student: " << endl;
+            printStudent(foundStudent);
             break;
         case 4:
+            //update function
+            break;
+        case 5:
             //delete function
             cout << "Please enter the ID of the student you wish to delete: " << endl;
-            int studentID;
             cin >> studentID;
             cin.ignore();
 
@@ -280,7 +331,7 @@ void menu(){
             cout << "The student has been deleted from the database." << endl;
             cout << "The runtime for this function was: " << runTime << endl;
             break;
-        case 5:
+        case 6:
             cout << "Program terminating." << endl;
             break; //if doing anything after calling menu() in main, change this to exit(0)
         default:
@@ -288,7 +339,7 @@ void menu(){
             break;
         }
 
-    } while(menuChoice != 5);
+    } while(menuChoice != 6);
 }
 
 //print bst inorder traversal (for debugging, delete later)
@@ -304,9 +355,9 @@ void print(Node* n){
 
 int main(){
 
-    menu();
+    menu(); //could maybe move this whole function into main
 
-    print(root); //remove along with function definition when done debugging
+    print(root); //remove when done debugging
 
     return 0;
 }
