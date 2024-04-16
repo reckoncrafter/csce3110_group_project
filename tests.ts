@@ -1,5 +1,16 @@
-import {llNode, LinkedList, Student, fullWalk} from './ll.ts';
+import {llNode, LinkedList, Student, fullWalk} from './ll';
 import {faker} from "@faker-js/faker";
+import { createInterface } from 'readline';
+
+var stdio = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
+const ask = (msg:string) => new Promise<string>(resolve => 
+    stdio.question(msg, response => resolve(response))
+);
+
+faker.seed(16); // fixed seed for predictability
 
 function fakeStudent(id:number){
     return new Student(
@@ -14,45 +25,139 @@ function fakeStudent(id:number){
 }
 
 var list = new LinkedList();
+var nextID: number = 0;
 
-{ // test block: create student roster
-    for(let i = 0; i < 100; i++){
-        let s = fakeStudent(i);
-        list.append(s);
-        console.log(s);
+while(nextID < 100){
+    let s = fakeStudent(nextID);
+    list.append(s);
+    console.log(`added: ${s.name}`);
+    nextID++;
+}
+
+const main = async ()=>{
+    while(true){
+        await ask(`Select test operation:
+1. Add student to the database
+2. Delete student
+3. Search by ID
+4. Search by Name
+5. Update record
+
+[1-5]: `)
+        .then(async (sel)=>{
+            switch(sel){
+                case "1":
+                    await add_student();
+                    break;
+                case "2":
+                    await delete_student();
+                    break;
+                case "3":
+                    await search_by_id();
+                    break;
+                case "4":
+                    await search_by_name();
+                    break;
+                case "5":
+                    await update_record();
+                    break;
+                default:
+                    console.error("Invalid selection.");
+            }
+        })
+    }
+}
+main();
+
+
+async function add_student(){
+
+    let student = new Student(nextID);
+    nextID++;
+    student.name = await ask("Name: ");
+    student.dob = new Date(await ask("DOB: "));
+    student.address_street = await ask("Address (Street name): ");
+    student.address_city = await ask ("Address (City): ");
+    student.address_state = await ask ("Address (State): ");
+    student.address_zip = await ask ("Address (Zip code): ");
+    
+    console.log(student);
+    list.append(student);
+}
+
+async function delete_student(){
+    let id = Number.parseInt(await ask("Enter student ID: "));
+    list.search(id);
+    let student = list.get();
+    console.log(student);
+
+    let confirm = await ask("Are you sure you want to delete the above?: [y/N] ");
+    if(confirm === "y"){
+        list.remove();
+    }else{
+        console.log("No action taken.");
     }
 }
 
-process.exit();
-
-{ // passed test block: list generation
-    console.log("-------");
-    list.head.data = 'A';
-    list.append('B');
-    list.append('C');
-    list.append('D');
-    fullWalk(list);
+async function search_by_id() {
+    let id = Number.parseInt(await ask("Enter student ID: "));
+    if(list.search(id)){
+        let student = list.get();
+        console.log(student);
+    }else{
+        console.log("Not found.");
+    }
 }
 
-{ // passed test block: insertion
-    console.log("-------");
-    list.reset();
-    list.step();
-    list.insert('5!');
-    fullWalk(list);
+async function search_by_name(){
+    let name = await ask("Enter student name: ");
+    if(list.search(name)){
+        let student = list.get();
+        console.log(student);
+    }else{
+        console.log("Not found");
+    }
 }
 
-{ // passed test block: searching
-    console.log("-------");
-    list.reset();
-    list.search('D');
-    console.log(list.get());
-}
+async function update_record(){
+    let id = Number.parseInt(await ask("Enter student ID: "));
+    if(list.search(id)){
+        let student = list.get()!;
+        console.log(student);
+        let sel = await ask(`Select field to update:
 
-{ // passed test block: deletion
-    console.log("-------");
-    list.reset();
-    list.search('B');
-    list.remove();
-    fullWalk(list);
+1. Name
+2. Date of Birth
+3. Address (Street)
+4. Address (City)
+5. Address (State)
+6. Address (Zip)
+[1-6]: `);
+        
+        switch(sel){
+            case "1":
+                student.name = await ask("Enter new name: ");
+                break;
+            case "2":
+                student.dob = new Date(await ask("Enter new DOB: "));
+                break;
+            case "3":
+                student.address_street = await ask("Enter new street: ");
+                break;
+            case "4":
+                student.address_city = await ask("Enter new city: ");
+                break;
+            case "5":
+                student.address_state = await ask("Enter new state: ");
+                break;
+            case "6":
+                student.address_zip = await ask("Enter new zip: ");
+                break;
+            default:
+                console.error("Invalid selection.");
+        }
+
+    }else{
+        console.log("Not found.")
+    }
 }

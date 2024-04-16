@@ -1,8 +1,8 @@
 export class llNode{
-    data: any;
+    data: Student | null | undefined;
     next: llNode | null | undefined;
 
-    constructor(d?: any, n?: llNode | null){
+    constructor(d?: Student, n?: llNode | null){
         this.data = d ?? null;
         this.next = n ?? null;
     }
@@ -27,7 +27,6 @@ export class Student{
         this.address_zip = ad_z;
     }
 }
-
 export class LinkedList{
     // This is a singly linked list
     head: llNode;
@@ -45,45 +44,78 @@ export class LinkedList{
         return this.cursor.data;
     }
     // Advances the cursor
-    step(): boolean{
+    step(count?:number): boolean{
         if(this.cursor.next == null) return false; // do not step if at end of list
+
+        if(count){
+            for(let i = 0; i < count; i++){
+                if(this.cursor.next == null) break;
+                this.cursor = this.cursor.next!;
+            }
+            return true;
+        }
+
         this.cursor = this.cursor.next!;
         return true;
     }
     // Appends node to the end of the linked list
-    append(data: any){
+    append(data: Student){
+        console.time("append");
         if(this.head.data == null){
             this.head.data = data;
+            console.timeEnd("append");
             return;
         }
 
         this.tail.next = new llNode(data, null);
         this.tail = this.tail.next;
+        console.timeEnd("append");
     }
     // Inserts at the current cursor position
-    insert(data: any){
+    insert(data: Student){
+        console.time("insert");
         let n = new llNode(data, this.cursor.next);
         this.cursor.next = n;
+        console.time("insert");
     }
     // Removes the node at the current cursor position
     remove(){
+        console.time("remove");
         let temp = this.head;
         while(temp.next != this.cursor){
-            if(temp.next == null) return;
+            if(temp.next == null){
+                console.timeEnd("remove");
+                return;
+            }
             temp = temp.next!;
         }
         temp.next = this.cursor.next;
         this.cursor = temp;
+        console.timeEnd("remove");
         // I can't seem to call delete on the cursor, but I assume it's deleted because the reference goes out of scope.
     }
     // Advances the cursor until the data equates searchTerm
-    search(searchTerm: any): boolean{
-        while(this.cursor.data != searchTerm){
-            if(!this.step()){
-                return false;
+
+    search(term: number | string): boolean{
+        console.time("search");
+        this.reset();
+        while(true){
+            let obj = this.get()!;
+            if(typeof term === "string"){
+                if(obj.name == term){
+                    console.timeEnd("search");
+                    return true;
+                }
+            }else{
+                if(obj.id == term){
+                    console.timeEnd("search");
+                    return true;
+                }
             }
+            if(!this.step()) break;
         }
-        return true;
+        console.timeEnd("search");
+        return false;
     }
     // Sets the cursor back to the head
     reset(){
