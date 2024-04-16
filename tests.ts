@@ -27,12 +27,14 @@ function fakeStudent(id:number){
 var list = new LinkedList();
 var nextID: number = 0;
 
-while(nextID < 100){
+console.time("generate database");
+while(nextID < 100000){
     let s = fakeStudent(nextID);
     list.append(s);
-    console.log(`added: ${s.name}`);
+    //console.log(`added: ${s.name}`);
     nextID++;
 }
+console.timeEnd("generate database");
 
 const main = async ()=>{
     while(true){
@@ -67,7 +69,56 @@ const main = async ()=>{
         })
     }
 }
-main();
+
+const automatic = async()=>{
+    // Adding student
+    console.log("===== Adding student =====");
+
+    let student = new Student(nextID);
+    nextID++;
+    student.name = "John Doe"
+    student.dob = faker.date.birthdate({min:18, max: 65});
+    student.address_street = faker.location.street();
+    student.address_city = faker.location.city();
+    student.address_state = faker.location.state();
+    student.address_zip = faker.location.zipCode();
+    console.log(student);
+    list.append(student);
+
+    // Deleting student 
+    console.log("===== Deleting student =====");
+
+    let id = faker.number.int({min:0, max:100000});
+    list.search(id);
+    student = list.get()!;
+    console.log(student);
+    list.remove();
+
+    // Searching by ID
+    console.log("===== Searching by ID =====");
+
+    id = faker.number.int({min:0, max: 100000});
+    list.search(id);
+    student = list.get()!;
+    console.log(student);
+
+    // Searching by Name
+    console.log("===== Searching by Name =====");
+
+    list.search("John Doe");
+    student = list.get()!;
+    console.log(student);
+
+    // Updating Record
+    console.log("===== Updating Record =====");
+    
+    student.name = "John Rockefeller";
+    console.log(student);
+
+    process.exit();
+}
+
+automatic();
 
 
 async function add_student(){

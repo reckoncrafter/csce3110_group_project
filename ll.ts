@@ -60,7 +60,7 @@ export class LinkedList{
     }
     // Appends node to the end of the linked list
     append(data: Student){
-        console.time("append");
+        //console.time("append");
         if(this.head.data == null){
             this.head.data = data;
             console.timeEnd("append");
@@ -69,7 +69,7 @@ export class LinkedList{
 
         this.tail.next = new llNode(data, null);
         this.tail = this.tail.next;
-        console.timeEnd("append");
+        //console.timeEnd("append");
     }
     // Inserts at the current cursor position
     insert(data: Student){

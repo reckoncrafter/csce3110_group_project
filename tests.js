@@ -23,12 +23,14 @@ function fakeStudent(id) {
 }
 var list = new ll_1.LinkedList();
 var nextID = 0;
-while (nextID < 100) {
+console.time("generate database");
+while (nextID < 100000) {
     let s = fakeStudent(nextID);
     list.append(s);
-    console.log(`added: ${s.name}`);
+    //console.log(`added: ${s.name}`);
     nextID++;
 }
+console.timeEnd("generate database");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     while (true) {
         yield ask(`Select test operation:
@@ -62,7 +64,44 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }));
     }
 });
-main();
+const automatic = () => __awaiter(void 0, void 0, void 0, function* () {
+    // Adding student
+    console.log("===== Adding student =====");
+    let student = new ll_1.Student(nextID);
+    nextID++;
+    student.name = "John Doe";
+    student.dob = faker_1.faker.date.birthdate({ min: 18, max: 65 });
+    student.address_street = faker_1.faker.location.street();
+    student.address_city = faker_1.faker.location.city();
+    student.address_state = faker_1.faker.location.state();
+    student.address_zip = faker_1.faker.location.zipCode();
+    console.log(student);
+    list.append(student);
+    // Deleting student 
+    console.log("===== Deleting student =====");
+    let id = faker_1.faker.number.int({ min: 0, max: 100000 });
+    list.search(id);
+    student = list.get();
+    console.log(student);
+    list.remove();
+    // Searching by ID
+    console.log("===== Searching by ID =====");
+    id = faker_1.faker.number.int({ min: 0, max: 100000 });
+    list.search(id);
+    student = list.get();
+    console.log(student);
+    // Searching by Name
+    console.log("===== Searching by Name =====");
+    list.search("John Doe");
+    student = list.get();
+    console.log(student);
+    // Updating Record
+    console.log("===== Updating Record =====");
+    student.name = "John Rockefeller";
+    console.log(student);
+    process.exit();
+});
+automatic();
 function add_student() {
     return __awaiter(this, void 0, void 0, function* () {
         let student = new ll_1.Student(nextID);
