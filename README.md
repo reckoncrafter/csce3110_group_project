@@ -2,6 +2,8 @@
 
 ⚠️ **This project is currently written in TypeScript and requires the TypeScript compiler to properly build.**
 
+⚠️ **This project is currently written in C++ and requires clang, g++, or other C++ standard compiler to build.**
+
 Authors:
 
 - Dawson Finklea
