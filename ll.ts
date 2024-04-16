@@ -8,6 +8,26 @@ export class llNode{
     }
 }
 
+export class Student{
+    id: number;
+    name?: string;
+    dob?: Date;
+    address_street?: string
+    address_city?: string;
+    address_state?: string;
+    address_zip?: string;
+
+    constructor(id:number, name?:string, dob?:Date, ad_sr?:string, ad_c?:string, ad_st?:string, ad_z?:string){
+        this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.address_street = ad_sr;
+        this.address_city = ad_c;
+        this.address_state = ad_st;
+        this.address_zip = ad_z;
+    }
+}
+
 export class LinkedList{
     // This is a singly linked list
     head: llNode;
@@ -32,6 +52,11 @@ export class LinkedList{
     }
     // Appends node to the end of the linked list
     append(data: any){
+        if(this.head.data == null){
+            this.head.data = data;
+            return;
+        }
+
         this.tail.next = new llNode(data, null);
         this.tail = this.tail.next;
     }
