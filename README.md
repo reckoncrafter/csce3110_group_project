@@ -12,6 +12,28 @@ Authors:
 - Katherine Gash
 - Koffi Amematekpo
 
+## Typescript Instructions
+
+The ll.js file produced by the Typescript compiler is included in this repository.
+
+If `npm` and `node` are not already installed, they can be installed via [`nvm`](https://github.com/nvm-sh/nvm)
+
+```sh
+npm install
+node ll.js
+```
+
+## C++ Instructions
+
+Either the gcc or clang compiler collections must be installed.
+
+```sh
+g++ bst.cpp -o bst
+./bst
+```
+
+## Project Requirements
+
 > **We must use two different data structures.**
 >
 > 1. Linked List
