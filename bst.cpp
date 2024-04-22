@@ -9,13 +9,6 @@ deleted from, searched for, and updated within the tree. Deleting, searching, an
 with the student's ID. Searching can also be done with the student's name. A student's ID cannot be 
 updated.
 The run time of each operation is found in the comment above that respective operation.
-
-
-@todo
-    fix delete function
-    add search by name function
-    incorporate faker
-    input validation
 */
 
 #include <iostream>
@@ -72,6 +65,7 @@ class Node{
         if(right){
             delete right;
         }
+        
     }
 };
 
@@ -111,53 +105,53 @@ class BinarySearchTree{
 
         /*
         * delete
-        *
-        * @todo Add code so it's fine to delete root - right now it's not
         */
+
        Node* deleteStudent(Node* &node, int sID){
             //base case
-            if(node == nullptr){
-                return nullptr;
+            if(node == NULL){
+                return node;
             }
             
             if(sID < node->student.id){
                 node->left = deleteStudent(node->left, sID);
-                return node;
             }
             else if(sID > node->student.id){
                 node->right = deleteStudent(node->right, sID);
-                return node;
             }
             else{
+                
+            
                 //node has one or no children
-                if(node->left == nullptr){
+                if(node->left == NULL){
                     Node* temp = node->right;
                     delete node;
                     return temp;
                 }
-                else if(node->right == nullptr){
+                else if(node->right == NULL){
                     Node* temp = node->left;
                     delete node;
                     return temp;
                 }
-                //node has two children, get inorder successor
-                Node* parent = node;
-                Node*temp = node->right;
+            
+         
+                
+                // //node has two children, get inorder successor
+                Node* temp = node->right;
                 while(temp->left != nullptr){
-                    parent = temp;
                     temp = temp->left;
                 }
-                //delete inorder successor
-                if(parent != node){
-                    parent->left = parent->right;
-                }
-                else{
-                    parent->right = temp->right;
-                }
 
-                //copy data from inorder successor
-                node->student = temp->student;
+                //copy temp's content to node
+                node->student.id = temp->student.id;
+                node->student.dob = temp->student.dob;
+                node->student.street = temp->student.street;
+                node->student.city = temp->student.city;
+                node->student.state = temp->student.state;
+                node->student.zip = temp->student.zip;
+
                 //delete inorder successor
+                node->right = deleteStudent(node->right, temp->student.id);
                 delete temp;
             }
             return node;
@@ -423,7 +417,7 @@ void menu(){
 
             //get runtime while performing delete
             start = chrono::high_resolution_clock::now();
-            bst.deleteStudent(root, studentID);
+            foundStudent = bst.deleteStudent(root, studentID);
             end = chrono::high_resolution_clock::now();
 
             runTime = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
