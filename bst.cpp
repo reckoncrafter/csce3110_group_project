@@ -23,9 +23,7 @@ The run time of each operation is found in the comment above that respective ope
 #include <chrono>
 #include <time.h>
 
-using namespace std;
-
-
+using namespace std; 
 
 class Student{
     public:
@@ -66,16 +64,18 @@ class Node{
         right = nullptr;
     }
 
-    //destructor ---- don't know if this should be included
-    // ~Node(){
-    //     if(left){
-    //         delete left;
-    //     }
-    //     if(right){
-    //         delete right;
-    //     }
-    // }
+    //destructor 
+    ~Node(){
+        if(left){
+            delete left;
+        }
+        if(right){
+            delete right;
+        }
+    }
 };
+
+void printStudent(Node *s); //prototype
 
 class BinarySearchTree{
     private:
@@ -86,12 +86,12 @@ class BinarySearchTree{
             root = nullptr;
         }
 
-        //destructor ---- don't know if this should be included
-        // ~BinarySearchTree(){
-        //     if(root){
-        //         delete root;
-        //     }
-        // }
+        //destructor
+        ~BinarySearchTree(){
+            if(root){
+                delete root;
+            }
+        }
 
         /*
         * insert
@@ -199,9 +199,77 @@ class BinarySearchTree{
 
         /*
         * update
-        *
-        * Runtime:
         */
+       Node* update(Node* &node, int sID){
+
+            Node* studentToUpdate;
+
+            //use search function to find student
+            studentToUpdate = search(node, sID);
+
+            //display student information to user
+            cout << "Here is the current information for that student:" << endl;
+            printStudent(studentToUpdate);
+
+            //ask user what they wish to modify
+            int updateChoice = -1;
+            int newZip;
+
+            do{
+                cout << "Please enter the number corresponding to your choice:" << endl;
+                cout << "(1) Update name" << endl;
+                cout << "(2) Update date of birth" << endl;
+                cout << "(3) Update street" << endl;
+                cout << "(4) Update city" << endl;
+                cout << "(5) Update state" << endl;
+                cout << "(6) Update zip code" << endl;
+                cout << "(7) Exit" << endl;
+
+                cin >> updateChoice;
+                cin.ignore();
+
+                //perform updates based on choice
+                switch (updateChoice)
+                {
+                case 1:
+                    cout << "Please enter the new first name: " << endl;
+                    getline(cin, studentToUpdate->student.name);
+                    break;
+                case 2:
+                    cout << "Please enter the new date of birth (DDMMYYY): " << endl;
+                    cin >> studentToUpdate->student.dob;
+                    cin.ignore();
+                    break;
+                case 3:
+                    cout << "Please enter the new street address: " << endl;
+                    getline(cin, studentToUpdate->student.street);
+                    break;
+                case 4:
+                    cout << "Please enter the new city: " << endl;
+                    getline(cin, studentToUpdate->student.city);
+                    break;
+                case 5:
+                    cout << "Please enter the new state: " << endl;
+                    getline(cin, studentToUpdate->student.state);
+                    break;
+                case 6:
+                    cout << "Please enter the new zip code: " << endl;
+                    cin >> newZip;
+                    cin.ignore(); 
+                    studentToUpdate->student.zip = newZip;
+                    break;
+                case 7:
+                    cout << "Returning to main menu." << endl;
+                    break;
+                default:
+                    cout << "Error: invalid choice." << endl;
+                    break;
+                }
+
+            }while(updateChoice != 7);
+
+            return studentToUpdate;
+       }
 };
 
 Student student = Student();
@@ -312,6 +380,14 @@ void menu(){
             break;
         case 4:
             //update function
+            cout << "Please enter the ID of the student you wish to update: " << endl;
+            cin >> studentID;
+            cin.ignore();
+
+            foundStudent = bst.update(root, studentID);
+
+            cout << "The updated student information is: " << endl;
+            printStudent(foundStudent);
             break;
         case 5:
             //delete function
