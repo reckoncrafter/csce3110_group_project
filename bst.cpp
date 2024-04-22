@@ -14,7 +14,6 @@ The run time of each operation is found in the comment above that respective ope
 @todo
     fix delete function
     add search by name function
-    add update function
     incorporate faker
     input validation
 */
@@ -22,6 +21,7 @@ The run time of each operation is found in the comment above that respective ope
 #include <iostream>
 #include <chrono>
 #include <time.h>
+#include <queue>
 
 using namespace std; 
 
@@ -95,8 +95,6 @@ class BinarySearchTree{
 
         /*
         * insert
-        *
-        * Runtime:
         */
 
         void insertStudent(Node* &node, Student s){
@@ -115,8 +113,6 @@ class BinarySearchTree{
         * delete
         *
         * @todo Add code so it's fine to delete root - right now it's not
-        * 
-        * Runtime:
         */
        Node* deleteStudent(Node* &node, int sID){
             //base case
@@ -171,8 +167,6 @@ class BinarySearchTree{
 
         /*
         * search via id
-        *
-        * Runtime:
         */
        Node* search(Node* &node, int sID){
             if(node == NULL || node->student.id == sID){
@@ -189,11 +183,27 @@ class BinarySearchTree{
 
         /*
         * search via name
-        *
-        * Runtime:
         */
        Node* search(Node* &node, string sName){
+            queue<Node*> treeQueue;
 
+            treeQueue.push(node);
+
+            while(!treeQueue.empty()){
+                Node* curr = treeQueue.front();
+
+                if (curr == nullptr || curr->student.name.compare(sName) == 0){
+                    return curr;
+                }
+                treeQueue.pop();
+                
+                if (curr->left){
+                    treeQueue.push(curr->left);
+                }
+                if (curr->right){
+                    treeQueue.push(curr->right);
+                }
+            }
        }
 
 
@@ -373,10 +383,17 @@ void menu(){
             cout << "Please enter the name of the student: " << endl;
             getline(cin, studentName);
 
+            start = chrono::high_resolution_clock::now();
             foundStudent = bst.search(root, studentName);
+            end = chrono::high_resolution_clock::now();
+
+            runTime = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            runTime *= 1e-9;
 
             cout << "Here are the details for the student: " << endl;
             printStudent(foundStudent);
+
+            cout << "The runtime for this function was: " << runTime << endl;
             break;
         case 4:
             //update function
@@ -384,10 +401,19 @@ void menu(){
             cin >> studentID;
             cin.ignore();
 
+            start = chrono::high_resolution_clock::now();
             foundStudent = bst.update(root, studentID);
+            end = chrono::high_resolution_clock::now();
+
+            runTime = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            runTime *= 1e-9;
+
+            cout << "The runtime for this function was: " << runTime << endl;
 
             cout << "The updated student information is: " << endl;
             printStudent(foundStudent);
+
+            cout << "The runtime for this function was: " << runTime << endl;
             break;
         case 5:
             //delete function
