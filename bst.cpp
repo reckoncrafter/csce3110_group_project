@@ -13,6 +13,7 @@ The run time of each operation is found in the comment above that respective ope
 
 #include <iostream>
 #include <chrono>
+#include <string>
 #include <time.h>
 #include <queue>
 
