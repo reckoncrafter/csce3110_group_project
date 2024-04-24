@@ -57,7 +57,7 @@ public:
 
     static string genDateOfBirth() {
         static mt19937 gen(random_device{}());
-        uniform_int_distribution<> disDay(1, 28);  // Simplified range
+        uniform_int_distribution<> disDay(1, 28);  
         uniform_int_distribution<> disMonth(1, 12);
         uniform_int_distribution<> disYear(1990, 2004);
 
