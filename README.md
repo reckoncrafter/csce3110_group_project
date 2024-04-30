@@ -2,6 +2,8 @@
 
 ⚠️ **This project is currently written in TypeScript and requires the TypeScript compiler to properly build.**
 
+⚠️ **This project is currently written in C++ and requires clang, g++, or other C++ standard compiler to build.**
+
 Authors:
 
 - Dawson Finklea
@@ -9,6 +11,28 @@ Authors:
 - Jackson Angarola
 - Katherine Gash
 - Koffi Amematekpo
+
+## Typescript Instructions
+
+The ll.js file produced by the Typescript compiler is included in this repository.
+
+If `npm` and `node` are not already installed, they can be installed via [`nvm`](https://github.com/nvm-sh/nvm)
+
+```sh
+npm install
+node ll.js
+```
+
+## C++ Instructions
+
+Either the gcc or clang compiler collections must be installed.
+
+```sh
+g++ bst.cpp -o bst
+./bst
+```
+
+## Project Requirements
 
 > **We must use two different data structures.**
 >

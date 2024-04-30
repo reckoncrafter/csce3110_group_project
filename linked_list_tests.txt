@@ -1,0 +1,55 @@
+generate database: 1.627s
+===== Adding student =====
+Student {
+  id: 100000,
+  name: 'John Doe',
+  dob: 0044-10-02T21:23:59.359Z,
+  address_street: 'Hudson Place',
+  address_city: 'Fort Alexandrea',
+  address_state: 'North Carolina',
+  address_zip: '03340'
+}
+===== Deleting student =====
+search: 2.983ms
+Student {
+  id: 32542,
+  name: 'Mr. Timmy Schmitt',
+  dob: 0052-08-10T15:41:30.385Z,
+  address_street: '6th Avenue',
+  address_city: 'Ricebury',
+  address_state: 'Nevada',
+  address_zip: '54802-2869'
+}
+remove: 2.518ms
+===== Searching by ID =====
+search: 3.522ms
+Student {
+  id: 49112,
+  name: 'Guy Weissnat',
+  dob: 0050-05-12T03:42:50.809Z,
+  address_street: 'E Pine Street',
+  address_city: 'Port St. Lucie',
+  address_state: 'Colorado',
+  address_zip: '05788'
+}
+===== Searching by Name =====
+search: 4.676ms
+Student {
+  id: 100000,
+  name: 'John Doe',
+  dob: 0044-10-02T21:23:59.359Z,
+  address_street: 'Hudson Place',
+  address_city: 'Fort Alexandrea',
+  address_state: 'North Carolina',
+  address_zip: '03340'
+}
+===== Updating Record =====
+Student {
+  id: 100000,
+  name: 'John Rockefeller',
+  dob: 0044-10-02T21:23:59.359Z,
+  address_street: 'Hudson Place',
+  address_city: 'Fort Alexandrea',
+  address_state: 'North Carolina',
+  address_zip: '03340'
+}
