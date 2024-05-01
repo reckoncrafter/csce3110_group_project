@@ -96,8 +96,10 @@ var LinkedList = /** @class */ (function () {
         return true;
     };
     // Appends node to the end of the linked list
-    LinkedList.prototype.append = function (data) {
-        //console.time("append");
+    LinkedList.prototype.append = function (data, enableTimer) {
+        if (enableTimer === void 0) { enableTimer = true; }
+        if (enableTimer)
+            console.time("append");
         if (this.head.data == null) {
             this.head.data = data;
             //console.timeEnd("append");
@@ -105,7 +107,8 @@ var LinkedList = /** @class */ (function () {
         }
         this.tail.next = new llNode(data, null);
         this.tail = this.tail.next;
-        //console.timeEnd("append");
+        if (enableTimer)
+            console.timeEnd("append");
     };
     // Inserts at the current cursor position
     LinkedList.prototype.insert = function (data) {
@@ -166,7 +169,7 @@ var fullWalk = function (list) {
         console.log(list.get());
     } while (list.step());
 };
-// main procedures
+// initialization procedures
 var faker_1 = require("@faker-js/faker");
 var process_1 = require("process");
 var readline_1 = require("readline");
@@ -186,11 +189,12 @@ var nextID = 0;
 console.time("generate database");
 while (nextID < 100000) {
     var s = fakeStudent(nextID);
-    list.append(s);
+    list.append(s, false);
     //console.log(`added: ${s.name}`);
     nextID++;
 }
 console.timeEnd("generate database");
+// main functions
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -246,7 +250,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     });
 }); };
 var automatic = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var student, id;
+    var student, id, random_index;
     return __generator(this, function (_a) {
         // Adding student
         console.log("===== Adding student =====");
@@ -278,10 +282,17 @@ var automatic = function () { return __awaiter(void 0, void 0, void 0, function 
         list.search("John Doe");
         student = list.get();
         console.log(student);
-        // Updating Record
-        console.log("===== Updating Record =====");
+        // Updating Arbitrary Record
+        console.log("===== Updating Arbitrary Record =====");
+        console.time("update record");
+        list.reset();
+        random_index = faker_1.faker.number.int({ min: 0, max: 99999 });
+        console.log("random_index: ", random_index);
+        list.step(random_index);
+        student = list.get();
         student.name = "John Rockefeller";
         console.log(student);
+        console.timeEnd("update record");
         process.exit();
         return [2 /*return*/];
     });

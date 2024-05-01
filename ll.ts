@@ -74,8 +74,8 @@ class LinkedList{
         return true;
     }
     // Appends node to the end of the linked list
-    append(data: Student){
-        //console.time("append");
+    append(data: Student, enableTimer = true){
+        if (enableTimer) console.time("append");
         if(this.head.data == null){
             this.head.data = data;
             //console.timeEnd("append");
@@ -84,7 +84,7 @@ class LinkedList{
 
         this.tail.next = new llNode(data, null);
         this.tail = this.tail.next;
-        //console.timeEnd("append");
+        if(enableTimer) console.timeEnd("append");
     }
     // Inserts at the current cursor position
     insert(data: Student){
@@ -179,7 +179,7 @@ var nextID: number = 0;
 console.time("generate database");
 while(nextID < 100000){
     let s = fakeStudent(nextID);
-    list.append(s);
+    list.append(s, false);
     //console.log(`added: ${s.name}`);
     nextID++;
 }
@@ -260,12 +260,20 @@ const automatic = async()=>{
     student = list.get()!;
     console.log(student);
 
-    // Updating Record
-    console.log("===== Updating Record =====");
+    // Updating Arbitrary Record
+    console.log("===== Updating Arbitrary Record =====");
+    console.time("update record");
     
+    list.reset();
+    let random_index = faker.number.int({min: 0, max: 99999});
+    console.log("random_index: ", random_index);
+    list.step(random_index);
+    student = list.get()!;
     student.name = "John Rockefeller";
+
     console.log(student);
 
+    console.timeEnd("update record");
     process.exit();
 }
 

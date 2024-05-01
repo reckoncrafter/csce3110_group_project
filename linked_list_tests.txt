@@ -1,4 +1,4 @@
-generate database: 1.627s
+generate database: 1.723s
 ===== Adding student =====
 Student {
   id: 100000,
@@ -9,8 +9,9 @@ Student {
   address_state: 'North Carolina',
   address_zip: '03340'
 }
+append: 0.007ms
 ===== Deleting student =====
-search: 2.983ms
+search: 3.607ms
 Student {
   id: 32542,
   name: 'Mr. Timmy Schmitt',
@@ -20,9 +21,9 @@ Student {
   address_state: 'Nevada',
   address_zip: '54802-2869'
 }
-remove: 2.518ms
+remove: 2.676ms
 ===== Searching by ID =====
-search: 3.522ms
+search: 3.169ms
 Student {
   id: 49112,
   name: 'Guy Weissnat',
@@ -33,7 +34,7 @@ Student {
   address_zip: '05788'
 }
 ===== Searching by Name =====
-search: 4.676ms
+search: 4.17ms
 Student {
   id: 100000,
   name: 'John Doe',
@@ -43,13 +44,15 @@ Student {
   address_state: 'North Carolina',
   address_zip: '03340'
 }
-===== Updating Record =====
+===== Updating Arbitrary Record =====
+random_index:  38541
 Student {
-  id: 100000,
+  id: 38542,
   name: 'John Rockefeller',
-  dob: 0044-10-02T21:23:59.359Z,
-  address_street: 'Hudson Place',
-  address_city: 'Fort Alexandrea',
-  address_state: 'North Carolina',
-  address_zip: '03340'
+  dob: 0022-08-06T10:35:06.989Z,
+  address_street: 'Gwen Course',
+  address_city: 'Stiedemannworth',
+  address_state: 'Indiana',
+  address_zip: '37263-3705'
 }
+update record: 2.977ms
