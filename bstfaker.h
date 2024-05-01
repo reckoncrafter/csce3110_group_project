@@ -76,7 +76,8 @@ class Faker {
         		int year = disYear(gen);
 
         		char buffer[11];
-        		sprintf(buffer, "%02d%02d%d", day, month, year);
+			// we used "sprintf" for the CELL machines but you can use "sprintf_s" if there is an error
+        		sprintf(buffer, "%02d%02d%d", day, month, year); 
         		return string(buffer);
     		}
 
